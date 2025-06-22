@@ -1,0 +1,107 @@
+extends ../layouts/main
+
+block content
+  style.
+    .form-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.15);
+      padding: 30px;
+      border: 1px solid rgba(0, 123, 255, 0.1);
+    }
+    .form-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .form-group {
+      flex: 1;
+      min-width: 260px;
+    }
+    .form-group.full-width {
+      flex: 0 0 100%;
+    }
+    .form-label {
+      font-weight: 600;
+      color: #1e40af;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .form-control, .form-select {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: #1e40af;
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
+      outline: none;
+    }
+    textarea.form-control {
+      resize: vertical;
+    }
+    .form-text {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+    .btn-primary {
+      width: 100%;
+      background: #1e40af;
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      background: #1e3a8a;
+      transform: translateY(-1px);
+    }
+    h2 {
+      color: #1e40af;
+      font-weight: 800;
+      font-size: 1.75rem;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    @media (max-width: 600px) {
+      .form-group {
+        min-width: 100%;
+      }
+    }
+  .form-container
+    h2 Cập nhật video bài học
+    form.form-grid(action=`/course/update-video/${video._id}?_method=PUT` method='post')
+      .form-group
+        label.form-label(for='courseSelect') Chọn khóa học
+        select#courseSelect.form-select(required='' name='courseId')
+          each course in courses
+            - var isSelected = video.courseId && (video.courseId._id ? video.courseId._id.toString() : video.courseId.toString()) === course._id.toString()
+            option(value=course._id, selected=isSelected)= course.name
+      .form-group
+        label.form-label(for='videoTitle') Tiêu đề video
+        input#videoTitle.form-control(type='text' placeholder='Nhập tiêu đề video' required='' name='title' value=video.title)
+      .form-group
+        label.form-label(for='videoDesc') Mô tả video
+        textarea#videoDesc.form-control(rows='3' placeholder='Nhập mô tả video' name='description')= video.description
+      .form-group
+        label.form-label(for='videoUrl') Link YouTube
+        input#videoUrl.form-control(type='url' placeholder='Dán link YouTube' required='' name='videoUrl' value=video.videoUrl)
+        .form-text Ví dụ: https://www.youtube.com/watch?v=xxxxxxx
+      .form-group
+        label.form-label(for='videoDuration') Thời lượng (phút:giây)
+        input#videoDuration.form-control(type='text' placeholder='VD: 10:05' required='' name='duration' value=video.durationFormatted)
+      .form-group
+        label.form-label(for='videoOrder') Thứ tự bài học
+        input#videoOrder.form-control(type='number' placeholder='VD: 1' min='1' required='' name='order' value= video.order)
+      .form-group.full-width
+        button.btn.btn-primary(type='submit') Cập nhật video

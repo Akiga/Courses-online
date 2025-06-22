@@ -1,0 +1,68 @@
+extends ../layouts/main
+
+block content
+  if course
+    .container.course-detail
+      .container-left
+        .container-course
+          h1.course-title= course.name || 'Khóa học không có tiêu đề'
+          span.course-note= course.des || 'Không có ghi chú'
+        .container-knowledge
+          
+          h4.knowledge-tile Bạn sẽ học được gì?
+          .knowledge-list
+            each item in course.learnd.split('\n')
+              - const cleanText = item.replace(/^-/, '').trim()
+              if cleanText
+                .knowledge-item.mb-2.d-flex.align-items-center
+                  i.fa-solid.fa-check.me-2.text-success
+                  span= cleanText
+          .container-content
+            h4.content-title Nội dung khóa học
+            li.contant-total-lesson
+              strong #{videoCount}
+              |  bài học
+
+          if videos && videos.length
+            ul.list-group
+              each video, i in videos
+                li.list-group-item.d-flex.justify-content-between.align-items-center
+                  | #{i + 1}. #{video.title}
+                  span.badge.text-bg-primary.rounded-pill= video.durationFormatted || '---'
+          else
+            p.text-muted Chưa có video nào trong khóa học.
+
+      .container-right
+        img.right-img.container-card-list(src=course.img, alt='Ảnh khóa học' data-tilt)
+        if course.purchased
+          //- h2.right-price= course.value === 0 ? 'MIỄN PHÍ' : course.value.toLocaleString('vi-VN') + ' VNĐ'
+          a(href=`/home/${course.slug}/videos/0`)
+            button.btn.btn-info.text-white.mb-3(type='button') VÀO HỌC NGAY
+        else
+          h2.right-price= course.value === 0 ? 'MIỄN PHÍ' : course.value.toLocaleString('vi-VN') + ' VNĐ'
+          form(action=`/home/buy/${course.slug}` method="post")
+            input(type="hidden" name="amount" value=course.value)
+            button.btn.btn-info.text-white.mb-3(type='submit') MUA KHÓA HỌC
+
+        ul.list-group.list-group-flush
+          li.list-group-item
+            i.fa-solid.fa-star
+            span= ' Trình độ ' + course.level 
+          li.list-group-item
+            i.fa-solid.fa-timeline
+            |  Thời gian học: 2 giờ
+          li.list-group-item
+            span= 'GV: ' + course.teacher
+          li.list-group-item
+            i.fa-solid.fa-school
+            |  Học mọi lúc mọi nơi
+
+  // Thêm thư viện + JS tilt ở cuối trang
+  script(src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js")
+  script.
+    VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
+      max: 15,
+      speed: 400,
+      glare: true,
+      "max-glare": 0.3
+    });

@@ -1,0 +1,214 @@
+extends ../layouts/main
+
+block content
+  style.
+    .me-container {
+      max-width: 1100px;
+      margin: 20px auto;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 123, 255, 0.1);
+      padding: 30px;
+      border: 1px solid rgba(0, 123, 255, 0.05);
+    }
+    .nav-tabs {
+      border-bottom: 2px solid #e5e7eb;
+      margin-bottom: 24px;
+      display: flex;
+    }
+    .nav-link {
+      color: #1e40af;
+      font-weight: 600;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px 8px 0 0;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: #f1f5f9;
+    }
+    .nav-link.active {
+      background: #1e40af;
+      color: #ffffff;
+    }
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    h2 {
+      color: #1e40af;
+      font-weight: 800;
+      font-size: 1.75rem;
+      margin: 0;
+    }
+    .me-btn-add {
+      background: #1e40af;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .me-btn-add:hover {
+      background: #1e3a8a;
+      transform: translateY(-1px);
+    }
+    .table-container {
+      overflow-x: auto;
+    }
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .table thead {
+      background: #1e40af;
+      color: #ffffff;
+    }
+    .table th {
+      padding: 12px 16px;
+      font-weight: 600;
+      text-align: left;
+    }
+    .table tbody tr {
+      border-bottom: 1px solid #e5e7eb;
+      transition: background 0.2s ease;
+    }
+    .table tbody tr:hover {
+      background: #f1f5f9;
+    }
+    .table td {
+      padding: 12px 16px;
+      vertical-align: middle;
+    }
+    .me-course-thumb, .me-video-thumb {
+      width: 100px;
+      height: 56px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #e5e7eb;
+    }
+    .me-btn-action {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .me-btn-edit {
+      background: #f59e0b;
+      color: #1f2937;
+      border: none;
+    }
+    .me-btn-edit:hover {
+      background: #d97706;
+      color: #ffffff;
+    }
+    .me-btn-delete {
+      background: #dc2626;
+      color: #ffffff;
+      border: none;
+    }
+    .me-btn-delete:hover {
+      background: #b91c1c;
+    }
+    .badge {
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .bg-success {
+      background: #10b981;
+      color: #ffffff;
+    }
+    .bg-danger {
+      background: #ef4444;
+      color: #ffffff;
+    }
+    @media (max-width: 768px) {
+      .me-container {
+        padding: 20px;
+        margin: 10px;
+      }
+      .table th, .table td {
+        padding: 10px;
+        font-size: 0.9rem;
+      }
+      .me-course-thumb, .me-video-thumb {
+        width: 80px;
+        height: 45px;
+      }
+      .me-btn-action {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+      }
+      .nav-tabs {
+        flex-wrap: wrap;
+      }
+    }
+  .me-container
+    ul.nav.nav-tabs.mb-4#myTab(role="tablist")
+      li.nav-item(role="presentation")
+        button.nav-link.active(
+          id="courses-tab",
+          data-bs-toggle="tab",
+          data-bs-target="#courses",
+          data-bs-aria-controls="courses",
+          type="button",
+          role="tab",
+          aria-selected="true"
+        ) Quản lý khóa học
+      
+
+    .tab-content#myTabContent
+      .tab-pane.fade.show.active#courses(role="tabpanel" aria-labelledby="courses-tab")
+        .header-section
+          h2 Quản lý khóa học của tôi
+          a.me-btn-add(href="/course/create") + Thêm khóa học
+        .table-container
+          table.table
+            thead
+              tr
+                th #
+                th Ảnh
+                th Tên khóa học
+                th Giảng viên
+                th Giá (VNĐ)
+                th Trạng thái
+                th Hành động
+            tbody
+            if courses.length != 0
+              each course, index in courses
+                tr
+                  td #{index + 1}
+                  td
+                    img.me-course-thumb(src=course.img alt="Ảnh khóa học")
+                  td
+                    a.text-decoration-none(href=`/course/manage-videos?slug=${course.slug}`)= course.name
+                  td= course.teacher
+                  td
+                    if course.value === 0
+                      | Miễn phí
+                    else
+                      | #{course.value.toLocaleString('vi-VN')} VNĐ
+                  td
+                    span.badge(class=course.status === 'open' ? 'bg-success' : 'bg-danger')= course.status === 'open' ? 'Đang hoạt động' : 'Ngừng hoạt động'
+                  td
+                    a.btn.me-btn-edit.me-btn-action.me-2(href=`/course/update/${course.slug}`) Sửa
+                    form(method='POST', action=`/course/${course.slug}?_method=DELETE`, style='display:inline')
+                      button.btn.me-btn-delete.me-btn-action(type='submit' onclick='return confirm("Xóa khóa học này?")') Xóa
+
+            else
+                tr
+                  td.text-center(colspan='7')
+                    | Hiện không tồn tại khóa học nào
+
+
+  script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js")

@@ -1,0 +1,24 @@
+nav.navbar.navbar-expand-lg.nav-stick(data-bs-theme="light")
+  .container-fluid
+    a.navbar-brand(href="/") SSM
+    a.navbar-brand.note-brand(href="/") Học tập là vinh quang
+    .collapse.navbar-collapse.align-search#navbarSupportedContent
+      form.d-flex(role="search" action="/" method="get")
+        input.form-control.me-2(type="search", placeholder="Tìm kiếm khóa học", aria-label="Search" name="q")
+        button.btn(type="submit")
+          i.fa-solid.fa-magnifying-glass
+    if account
+      .account-dropdown
+          button.account-button#showDropdown
+            img(src=account.avt, alt="Avatar")
+            span=account.fullname
+          .dropdown-content#dropdownMenu
+            a(href="/home/information") Thông tin cá nhân
+            if account.role == 'admin'
+              a(href="/course/me") Quản lý khóa học
+            form(action='/user/logout' method='post')
+              button(type="submit", style='width:100%; padding: 12px 16px; border: none; background-color:#fff; display:block; color: red') Đăng xuất
+    else
+      ul.navbar-nav.me-auto.mb-2.mb-lg-0
+          li.nav-item
+            a.nav-link.active.btn-login(onclick="openModal()") Đăng nhập

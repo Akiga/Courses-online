@@ -1,0 +1,210 @@
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(120deg, #fff 0%, #f7f7f7 100%);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+.video-container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 40px 32px 32px 32px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px #007bff;
+    position: relative;
+    overflow: hidden;
+}
+.video-title {
+    margin-top: 0;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 2.7rem;
+    color: #007bff;
+    letter-spacing: 1px;
+    text-align: center;
+    text-shadow: 0 2px 8px #f7b42c44;
+}
+.video-wrapper {
+    text-align: center;
+    margin-bottom: 32px;
+}
+.video-frame {
+    width: 100%;
+    max-width: 800px;
+    height: 450px;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px #f7b42c44;
+    border: none;
+    transition: box-shadow 0.3s;
+}
+.video-frame:hover {
+    box-shadow: 0 8px 32px #007bff;
+}
+.video-description {
+    margin-bottom: 32px;
+    background: linear-gradient(90deg, #fff 60%, #f7f7f7 100%);
+    padding: 20px 28px;
+    border-radius: 10px;
+    font-size: 1.15rem;
+    box-shadow: 0 2px 8px #f7b42c22;
+    color: #232946;
+}
+.video-description strong {
+    color: #007bff;
+    font-size: 1.18rem;
+}
+.video-description-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    max-width: 100%;
+    transition: all 0.3s ease;
+}
+#toggleDescription {
+    display: none;
+}
+#toggleDescription:checked ~ .video-description-text {
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    overflow: visible;
+}
+.xem-them-label {
+    color: #007bff;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 8px;
+    user-select: none;
+    display: inline-block;
+}
+.xem-them-label::after {
+    content: "Xem thêm";
+}
+#toggleDescription:checked ~ .xem-them-label::after {
+    content: "Thu gọn";
+}
+.xem-them-label:hover {
+    text-decoration: underline;
+}
+.video-lessons-title {
+    color: #007bff;
+    font-family: 'Montserrat', Arial, sans-serif;
+    margin-bottom: 18px;
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+}
+.video-lesson-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 320px;
+    overflow-y: auto;
+    border: 1px solid #f7b42c33;
+    background: #fff;
+    border-radius: 8px;
+}
+.video-lesson-item {
+    padding: 16px 22px;
+    background: #f7f7f7;
+    border-radius: 8px;
+    border-left: 6px solid #007bff;
+    font-size: 1.12rem;
+    transition: background 0.2s, box-shadow 0.2s, border-left 0.2s;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #f7b42c11;
+    position: relative;
+    color: #232946;
+}
+.video-lesson-item:hover {
+    background: #fff;
+    box-shadow: 0 4px 16px #fc575e22;
+    border-left: 6px solid #fc575e;
+}
+.video-lesson-duration {
+    float: right;
+    background: #fff;
+    color: #007bff;
+    font-size: 0.98em;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin-left: 12px;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-weight: bold;
+}
+.video-comment-section {
+    margin-top: 36px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px #f7b42c22;
+    padding: 24px 24px 16px 24px;
+    color: #232946;
+}
+.video-comment-title {
+    font-family: 'Montserrat', Arial, sans-serif;
+    color: #007bff;
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+}
+.video-comment-input {
+    width: 100%;
+    min-height: 60px;
+    border-radius: 8px;
+    border: 1px solid #f7b42c44;
+    padding: 8px;
+    font-size: 1rem;
+    resize: vertical;
+    margin-bottom: 10px;
+    background: #fff;
+    color: #232946;
+}
+.video-comment-send {
+    background: #007bff;
+    color: #232946;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 18px;
+}
+.video-comment-send:hover {
+    background: #007bff;
+    color: #fff;
+}
+.video-comment-list {
+    margin-top: 10px;
+    max-height: 220px;
+    overflow-y: auto;
+    font-size: 0.98rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #fff;
+}
+.video-comment-item {
+    background: #f7f7f7;
+    color: #232946;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px #f7b42c22;
+    word-break: break-word;
+}
+@media (max-width: 720px) {
+    .video-container { padding: 16px 4px; }
+    .video-frame { font-size: 1.5rem; height: 400px; }
+    .video-comment-section { padding: 12px 4px 8px 4px; }
+}
+@media (max-width: 721px) and (max-width: 820px) {
+    .video-frame { height: 450px; }
+}
+@media (max-width: 600px) {
+    .video-frame { height: 300px; }
+}

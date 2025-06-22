@@ -1,0 +1,31 @@
+extends ../layouts/main
+
+block content
+    .video-container
+        h1.video-title= video.title
+        .video-wrapper
+            iframe.video-frame(
+                src=video.videoUrl
+                title=video.title
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+            )
+        .video-description
+            strong Mô tả khóa học:
+            input#toggleDescription(type="checkbox" style="display: none;")
+            p.video-description-text#videoDescription= video.description
+            label.xem-them-label(for="toggleDescription")
+            
+        h3.mt-4 Danh sách bài học
+        ul.video-lesson-list
+            each v, i in videos
+                li.video-lesson-item(class=(i === index ? 'active' : ''))
+                    a(href=`/home/${course.slug}/videos/${i}`)= `${i + 1}. ${v.title}`
+                    span.video-lesson-duration= v.durationFormatted || '---'
+        //- BÌNH LUẬN BÊN DƯỚI VIDEO
+        input(type='hidden', id='videoId', value=video._id)
+        .video-comment-section
+            .video-comment-title Bình luận
+            textarea.video-comment-input#commentInput(placeholder="Nhập bình luận...")
+            button.video-comment-send#sendComment Gửi
+            .video-comment-list#commentList

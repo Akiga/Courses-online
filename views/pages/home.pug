@@ -1,0 +1,89 @@
+extends ../layouts/main
+
+block content
+  if successMessage
+    .alert.alert-success.alert-dismissible.fade.show(role="alert")
+      | #{successMessage}
+      button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+  // Slider
+  .sliders
+    #carouselExampleInterval.carousel.slide(data-bs-ride="carousel")
+      .carousel-inner
+        .carousel-item.active.img-height(data-bs-interval="8000")
+          img.d-block.w-100(src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1200&q=80", alt="Lập trình web hiện đại")
+          .carousel-caption.d-none.d-md-block.text-start
+            h2.text-slider-title Khám phá thế giới lập trình web
+            p.text-slider-desc Học HTML, CSS, JavaScript và các công nghệ mới nhất cùng chuyên gia.
+            a.btn.btn-warning.mt-2(href="/course/html-css") Bắt đầu học ngay
+        .carousel-item.img-height(data-bs-interval="8000")
+          img.d-block.w-100(src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80", alt="Khóa học ReactJS")
+          .carousel-caption.d-none.d-md-block.text-end
+            h2.text-slider-title Làm chủ ReactJS từ A-Z
+            p.text-slider-desc Xây dựng ứng dụng web động, hiện đại với ReactJS.
+            a.btn.btn-primary.mt-2(href="/course/reactjs") Xem chi tiết
+        .carousel-item.img-height
+          img.d-block.w-100(src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80", alt="Khóa học NodeJS")
+          .carousel-caption.d-none.d-md-block.text-center
+            h2.text-slider-title Backend chuyên nghiệp với NodeJS
+            p.text-slider-desc Phát triển server, API và ứng dụng thực tế với NodeJS & Express.
+            a.btn.btn-success.mt-2(href="/course/nodejs") Khám phá ngay
+      button.carousel-control-prev(type="button", data-bs-target="#carouselExampleInterval", data-bs-slide="prev")
+        span.carousel-control-prev-icon(aria-hidden="true")
+        span.visually-hidden Previous
+      button.carousel-control-next(type="button", data-bs-target="#carouselExampleInterval", data-bs-slide="next")
+        span.carousel-control-next-icon(aria-hidden="true")
+        span.visually-hidden Next
+
+  // Courses
+  .container-courses
+    h2.container-header Khóa học mới
+    .container.text-center
+      .row
+        each course in courses
+          .card.container-card-list.card-br( style="width: 18rem;")
+            img.card-img-top.card-img-br(src=course.img || '', alt="Ảnh Lỗi")
+            .card-body
+              h5.card-title= course.name || 'Không có tiêu đề'
+              if course.value >= 1000000
+                p.card-text.text-danger.fw-bold= course.value.toLocaleString('vi-VN') + ' VNĐ'
+              else if course.value < 1000000 && course.value != 0
+                p.card-text.text-primary.fw-bold= course.value.toLocaleString('vi-VN') + ' VNĐ'
+              else
+                p.card-text.text-success.fw-bold Miễn phí
+              a.btn.btn-primary(href=`/home/${course.slug}`) Xem chi tiết
+
+  // News
+  //- .container-news
+  //-   h2.container-header-news Bài viết
+  //-   .container.text-center
+  //-     .row
+  //-       .card.container-card-list(style="width: 18rem;")
+  //-         img.card-img-top.container-card-courses(src="https://khoinguonsangtao.vn/wp-content/uploads/2021/12/hinh-nen-may-tinh-4k-game-lien-minh.jpg", alt="...")
+  //-         .card-body
+  //-           h5.card-title Card title
+  //-           p.card-text Some quick example text to build on the card title and make up the bulk of the card’s content.
+  //-           a.btn.btn-primary(href="#") Go somewhere
+  //-       .card.container-card-list(style="width: 18rem;")
+  //-         img.card-img-top(src="https://th.bing.com/th/id/R.2151bf4fccc53fcb7c3b019be1926041?rik=6SiZnpKqwJ0Teg&pid=ImgRaw&r=0", alt="...")
+  //-         .card-body
+  //-           h5.card-title Card title
+  //-           p.card-text Some quick example text to build on the card title and make up the bulk of the card’s content.
+  //-           a.btn.btn-primary(href="#") Go somewhere
+  //-       .card.container-card-list(style="width: 18rem;")
+  //-         img.card-img-top(src="https://th.bing.com/th/id/R.2151bf4fccc53fcb7c3b019be1926041?rik=6SiZnpKqwJ0Teg&pid=ImgRaw&r=0", alt="...")
+  //-         .card-body
+  //-           h5.card-title Card title
+  //-           p.card-text Some quick example text to build on the card title and make up the bulk of the card’s content.
+  //-           a.btn.btn-primary(href="#") Go somewhere
+  //-       .card.container-card-list(style="width: 18rem;")
+  //-         img.card-img-top(src="https://th.bing.com/th/id/R.2151bf4fccc53fcb7c3b019be1926041?rik=6SiZnpKqwJ0Teg&pid=ImgRaw&r=0", alt="...")
+  //-         .card-body
+  //-           h5.card-title Card title
+  //-           p.card-text Some quick example text to build on the card title and make up the bulk of the card’s content.
+  //-           a.btn.btn-primary(href="#") Go somewhere
+  //-       .card.container-card-list(style="width: 18rem;")
+  //-         img.card-img-top(src="https://th.bing.com/th/id/R.2151bf4fccc53fcb7c3b019be1926041?rik=6SiZnpKqwJ0Teg&pid=ImgRaw&r=0", alt="...")
+  //-         .card-body
+  //-           h5.card-title Card title
+  //-           p.card-text Some quick example text to build on the card title and make up the bulk of the card’s content.
+  //-           a.btn.btn-primary(href="#") Go somewhere

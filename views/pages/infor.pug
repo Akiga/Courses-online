@@ -1,0 +1,155 @@
+extends ../layouts/main
+
+block content
+  style.
+    .profile-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      background: linear-gradient(145deg, #ffffff, #f8fafc);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 123, 255, 0.15);
+      padding: 32px;
+      border: 1px solid rgba(0, 123, 255, 0.05);
+    }
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    .profile-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 40px;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.05);
+    }
+    .info-item {
+      flex: 1;
+      min-width: 280px;
+    }
+    .info-label {
+      font-weight: 700;
+      color: #1e40af;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .info-value {
+      font-size: 1.1rem;
+      color: #1f2937;
+      background: #f1f5f9;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      word-break: break-word;
+    }
+    .courses-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .course-card {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #e5e7eb;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    .course-card:hover {
+      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.15);
+      transform: translateY(-4px);
+    }
+    .course-thumb {
+      width: 140px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      margin-right: 20px;
+    }
+    .course-info {
+      flex: 1;
+    }
+    .course-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+    .course-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .me-btn-browse {
+      background: #1e40af;
+      transition: all 0.2s ease;
+    }
+    .me-btn-browse:hover {
+      background: #1e3a8a;
+      transform: translateY(-1px);
+    }
+    @media (max-width: 768px) {
+      .profile-container {
+        padding: 20px;
+        margin: 12px;
+      }
+      .profile-header, .courses-header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+      .info-item {
+        min-width: 100%;
+      }
+      .course-thumb {
+        width: 100px;
+        height: 56px;
+        margin-right: 0;
+        margin-bottom: 16px;
+      }
+      .course-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+      }
+    }
+  .profile-container
+    .profile-header
+      h2.text-primary.fw-bold.fs-4.mb-0 Thông tin cá nhân
+    .profile-info
+      .info-item
+        .info-label Họ và tên
+        .info-value= user.fullname
+      .info-item
+        .info-label Email
+        .info-value= user.email
+      .info-item
+        .info-label Ảnh cá nhân
+        .info-value= user.avt
+    if user.role == 'user'
+      .courses-header
+        h3.text-primary.fw-bold.fs-4.mb-0 Khóa học đã mua
+        a.btn.me-btn-browse.text-white.fw-semibold.btn-sm(href="/") Xem thêm khóa học
+      if courses && courses.length
+        each course in courses
+          a.course-card(href=`/home/${course.slug}`)
+            img.course-thumb(src=course.img alt="Ảnh khóa học")
+            .course-info
+              .course-title= course.name
+              .course-meta
+                span.badge.bg-success.fs-6= course.value === 0 ? 'Miễn phí' : `${course.value.toLocaleString('vi-VN')} VNĐ`
+                span.text-muted.fs-6.ms-2= course.status === 'open' ? 'Hoạt động' : 'Ngừng'
+      else
+        p.text-center.text-muted.fs-5.mt-4 Hiện không có khóa học nào đã mua
+  script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js")
