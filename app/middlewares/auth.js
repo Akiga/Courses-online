@@ -1,3 +1,4 @@
+// Lưu đăng nhập
 module.exports = function(req, res, next) {
   res.locals.account = req.session.account || null;
   res.locals.successMessage = req.session.successMessage || null;
@@ -6,6 +7,8 @@ module.exports = function(req, res, next) {
     delete req.session.successMessage;
   next();
 };
+
+// Phân quyền
 module.exports.requireAdmin = function (req, res, next) {
   if (req.session.account && req.session.account.role === 'admin') {
     return next();

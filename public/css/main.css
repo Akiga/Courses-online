@@ -27,6 +27,10 @@
     border: 1px solid rgba(0,0,0,0.1);
 }
 
+.navbar-logo{
+  width: 100px;
+}
+
 .note-brand{
     font-weight: 700;
     font-size: 14px;

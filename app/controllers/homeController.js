@@ -4,6 +4,8 @@ const Enrollment = require('../models/enrollments');
 const User = require('../models/users')
 const { multipleMongooseToObject } = require('../../util/mongoose');
 const { mongooseToObject } = require('../../util/mongoose');
+const moment = require('moment');
+
 
 function formatDuration(seconds) {
   const min = Math.floor(seconds / 60);
@@ -12,6 +14,8 @@ function formatDuration(seconds) {
 }
 
 class HomeController {
+
+    // Render khóa học ra trang chủ kèm theo chức năng tìm kiếm
     index(req, res) {
         const query = req.query.q || '';
         const searchCondition = query
@@ -31,6 +35,7 @@ class HomeController {
     }
 
 
+    // Dùng slug để Render ra trang chi tiết khóa học
     async detail(req, res) {
         try {
             const course = await Course.findOne({ slug: req.params.slug });
@@ -80,7 +85,7 @@ class HomeController {
         }
         }
 
-
+    // Render ra trang video dụa theo khóa học
     async courseVideo(req, res) {
         const { slug, index } = req.params;
 
@@ -113,6 +118,7 @@ class HomeController {
         }
     }
 
+    // Mua khóa học
     async buyCourse(req, res, next){
         const slug = req.params.slug;
         const user = req.session.account;
@@ -144,6 +150,7 @@ class HomeController {
         }
     }
 
+    // Render ra trang thông tin cá nhân
     async infor(req, res, next){
         try{
             const user = req.session.account;
@@ -155,15 +162,38 @@ class HomeController {
             // Lấy danh sách khóa học theo slug
             const courses = await Course.find({ slug: { $in: slugs } });
 
+            const formattedDate = moment(user.createdAt).format('DD/MM/YYYY');
+
             res.render('pages/infor', {
                 user,
-                courses: courses.map(course => course.toObject())
+                courses: courses.map(course => course.toObject()),
+                formattedDate
             });
         }catch (err) {
         console.error('Lỗi lấy thông tin cá nhân:', err);
         res.status(500).send('Lỗi máy chủ');
         }
     }
+
+    async updateUser(req, res) {
+        try {
+            const userId = req.session.account._id;
+            const { fullname, avt } = req.body;
+
+            const updatedUser = await User.findByIdAndUpdate(
+                userId,
+                { fullname, avt },
+                { new: true } // Trả về bản ghi đã cập nhật
+            );
+
+            req.session.account = updatedUser;
+            res.redirect('/home/information');
+        } catch (err) {
+            console.error('Lỗi cập nhật thông tin:', err);
+            res.status(500).send('Lỗi cập nhật');
+        }
+    }
+
 }
 
 module.exports = new HomeController();

@@ -11,8 +11,9 @@ router.post('/create', userController.store)
 router.post('/login', userController.login)
 // Đăng xuất
 router.post('/logout', userController.logout)
-
+// Đăng nhập bằng google
 router.post('/google/callback', userController.gglogin);
+
 
 
 

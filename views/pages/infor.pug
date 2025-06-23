@@ -2,63 +2,116 @@ extends ../layouts/main
 
 block content
   style.
+    :root {
+      --primary: #2563eb;
+      --secondary: #64748b;
+      --background: #f8fafc;
+      --card-bg: #ffffff;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
     .profile-container {
-      max-width: 1200px;
-      margin: 30px auto;
-      background: linear-gradient(145deg, #ffffff, #f8fafc);
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0, 123, 255, 0.15);
-      padding: 32px;
-      border: 1px solid rgba(0, 123, 255, 0.05);
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 30px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
     }
     .profile-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 32px;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .profile-header h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary);
     }
     .profile-info {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 24px;
-      margin-bottom: 40px;
-      background: #ffffff;
-      padding: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 25px;
+      background: var(--background);
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.05);
+      margin-bottom: 40px;
     }
     .info-item {
-      flex: 1;
-      min-width: 280px;
+      display: flex;
+      flex-direction: column;
     }
     .info-label {
-      font-weight: 700;
-      color: #1e40af;
-      font-size: 0.95rem;
-      margin-bottom: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 8px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
-    .info-value {
-      font-size: 1.1rem;
-      color: #1f2937;
-      background: #f1f5f9;
-      padding: 10px 16px;
+    .info-value, input.info-value {
+      font-size: 1rem;
+      padding: 12px;
+      border: 1px solid #d1d5db;
       border-radius: 8px;
-      border: 1px solid #e5e7eb;
-      word-break: break-word;
+      background: #ffffff;
+      color: #1f2937;
+      transition: border-color 0.3s ease;
+    }
+    input.info-value:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .profile-info img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-top: 10px;
+      border: 2px solid #e5e7eb;
+    }
+    .btn-user {
+      background: var(--primary);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-user:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
     }
     .courses-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 25px;
+    }
+    .courses-header h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .me-btn-browse {
+      background: var(--primary);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .me-btn-browse:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
     }
     .course-card {
       display: flex;
       align-items: center;
       padding: 20px;
-      background: #ffffff;
+      background: var(--card-bg);
       border-radius: 12px;
       margin-bottom: 20px;
       border: 1px solid #e5e7eb;
@@ -66,90 +119,95 @@ block content
       text-decoration: none;
     }
     .course-card:hover {
-      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.15);
       transform: translateY(-4px);
+      box-shadow: var(--shadow);
     }
     .course-thumb {
-      width: 140px;
+      width: 120px;
       height: 80px;
       object-fit: cover;
       border-radius: 8px;
-      border: 1px solid #e5e7eb;
       margin-right: 20px;
     }
-    .course-info {
-      flex: 1;
-    }
     .course-title {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 600;
       color: #1f2937;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     .course-meta {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      gap: 15px;
+      font-size: 0.9rem;
     }
-    .me-btn-browse {
-      background: #1e40af;
-      transition: all 0.2s ease;
-    }
-    .me-btn-browse:hover {
-      background: #1e3a8a;
-      transform: translateY(-1px);
+    .no-courses {
+      text-align: center;
+      color: var(--secondary);
+      font-size: 1.1rem;
+      padding: 30px;
+      background: var(--background);
+      border-radius: 12px;
     }
     @media (max-width: 768px) {
       .profile-container {
+        margin: 20px;
         padding: 20px;
-        margin: 12px;
       }
       .profile-header, .courses-header {
         flex-direction: column;
-        gap: 16px;
+        gap: 15px;
         text-align: center;
       }
-      .info-item {
-        min-width: 100%;
-      }
-      .course-thumb {
-        width: 100px;
-        height: 56px;
-        margin-right: 0;
-        margin-bottom: 16px;
+      .profile-info {
+        grid-template-columns: 1fr;
       }
       .course-card {
         flex-direction: column;
         align-items: flex-start;
-        padding: 16px;
+        text-align: center;
+      }
+      .course-thumb {
+        width: 100%;
+        height: auto;
+        margin-bottom: 15px;
       }
     }
+
   .profile-container
     .profile-header
-      h2.text-primary.fw-bold.fs-4.mb-0 Thông tin cá nhân
-    .profile-info
+      h2 Thông tin cá nhân
+    form(action="/home/update-user", method="post").profile-info
       .info-item
         .info-label Họ và tên
-        .info-value= user.fullname
+        input.info-value(type="text", name="fullname", value=user.fullname, placeholder="Nhập họ và tên")
       .info-item
         .info-label Email
         .info-value= user.email
       .info-item
+        .info-label Tham gia từ
+        .info-value= formattedDate
+      .info-item
         .info-label Ảnh cá nhân
-        .info-value= user.avt
+        input.info-value(type="text", name="avt", value=user.avt, placeholder="Nhập URL ảnh")
+      .info-item
+        img(src=user.avt, alt="Ảnh cá nhân")
+      button.btn.btn-user(type='submit')
+        i.fa-solid.fa-save.me-2
+        | Cập nhật thông tin
     if user.role == 'user'
       .courses-header
-        h3.text-primary.fw-bold.fs-4.mb-0 Khóa học đã mua
-        a.btn.me-btn-browse.text-white.fw-semibold.btn-sm(href="/") Xem thêm khóa học
+        h3 Khóa học đã mua
+        a.btn.me-btn-browse(href="/") Khám phá thêm khóa học
       if courses && courses.length
         each course in courses
           a.course-card(href=`/home/${course.slug}`)
-            img.course-thumb(src=course.img alt="Ảnh khóa học")
+            img.course-thumb(src=course.img, alt=`Ảnh khóa học ${course.name}`)
             .course-info
               .course-title= course.name
               .course-meta
-                span.badge.bg-success.fs-6= course.value === 0 ? 'Miễn phí' : `${course.value.toLocaleString('vi-VN')} VNĐ`
-                span.text-muted.fs-6.ms-2= course.status === 'open' ? 'Hoạt động' : 'Ngừng'
+                span.badge.bg-success= course.value === 0 ? 'Miễn phí' : `${course.value.toLocaleString('vi-VN')} VNĐ`
+                span.text-muted= course.status === 'open' ? 'Hoạt động' : 'Ngừng'
       else
-        p.text-center.text-muted.fs-5.mt-4 Hiện không có khóa học nào đã mua
+        .no-courses Hiện tại bạn chưa đăng ký khóa học nào
+
   script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js")

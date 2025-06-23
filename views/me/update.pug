@@ -78,6 +78,11 @@ block content
         min-width: 100%;
       }
     }
+  if error
+    .alert.alert-danger.alert-dismissible.fade.show(role="alert")
+      | #{error}
+      button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+
   .form-container
     h2 CẬP NHẬT KHÓA HỌC
     form.form-grid(action=`/course/${course._id}?_method=PUT` method='post')

@@ -2,20 +2,21 @@ const User = require('../models/users')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client('264589417572-tq2bbpbpa8u17ird19imaa5claui2djp.apps.googleusercontent.com');
 class userController{
+    // Chức năng đăng nhập
     async store(req, res, next) {
-    const userData = req.body;
-    const user = new User(userData);
+        const userData = req.body;
+        const user = new User(userData);
 
-    try {
-        await user.save();
-        req.session.successMessage = 'Đăng ký thành công! Hãy đăng nhập';
-        res.redirect('/');
-    } catch (err) {
-        next(err);
+        try {
+            await user.save();
+            req.session.successMessage = 'Đăng ký thành công! Hãy đăng nhập';
+            res.redirect('/');
+        } catch (err) {
+            next(err);
+        }
     }
-}
 
-
+    // Chức năng login
     async login(req, res, next){
         const format = req.body;
         try{
@@ -32,6 +33,7 @@ class userController{
         }
     }
     
+    // Chức năng đăng xuất
     logout(req, res, next) {
         req.session.destroy((err) => {
             if (err) {
@@ -41,6 +43,7 @@ class userController{
         });
     }
 
+    // Chức năng đăng nhập bằng google
     async gglogin(req, res, next){
         const token = req.body.token;
         

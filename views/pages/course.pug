@@ -33,7 +33,7 @@ block content
             p.text-muted Chưa có video nào trong khóa học.
 
       .container-right
-        img.right-img.container-card-list(src=course.img, alt='Ảnh khóa học' data-tilt)
+        img.right-img.container-card-list.mb-3(src=course.img, alt='Ảnh khóa học' data-tilt)
         if course.purchased
           //- h2.right-price= course.value === 0 ? 'MIỄN PHÍ' : course.value.toLocaleString('vi-VN') + ' VNĐ'
           a(href=`/home/${course.slug}/videos/0`)

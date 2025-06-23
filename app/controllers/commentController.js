@@ -1,6 +1,6 @@
 const Comment = require('../models/comments');
 class commentController{
-    
+    // Đăng bình luận
     async add(req, res){
         const { content, videoId } = req.body;
         const userId = req.session.account._id;
@@ -15,6 +15,7 @@ class commentController{
         }
     }
 
+    // Render bình luận ra view
     async view(req, res){
         try {
             const comments = await Comment.find({ videoId: req.params.videoId })
