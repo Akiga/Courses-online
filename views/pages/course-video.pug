@@ -1,6 +1,10 @@
 extends ../layouts/main
 
 block content
+    if buySuccess
+        script.
+            alert("#{buySuccess}");
+        
     .video-container
         h1.video-title= video.title
         .video-wrapper

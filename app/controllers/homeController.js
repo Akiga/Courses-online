@@ -87,6 +87,8 @@ class HomeController {
 
     // Render ra trang video dụa theo khóa học
     async courseVideo(req, res) {
+        const buySuccess = req.session.buySuccess;
+        delete req.session.buySuccess;
         const { slug, index } = req.params;
 
         try {
@@ -111,7 +113,8 @@ class HomeController {
             course: mongooseToObject(course),
             video,
             videos: videosFormatted,
-            index: i
+            index: i,
+            buySuccess
             });
         } catch (err) {
             res.status(500).send('Internal Server Error');
@@ -142,7 +145,7 @@ class HomeController {
     
         // Chưa mua thì tạo mới
         await Enrollment.create({ userId: user._id, courseId: course._id, courseSlug: course.slug });
-    
+        req.session.buySuccess = 'Mua khóa học thành công';
         return res.redirect(`/home/${course.slug}/videos/0`);
         } catch (err) {
         console.error('Lỗi mua khóa học:', err);
