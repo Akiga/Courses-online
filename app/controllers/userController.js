@@ -10,9 +10,18 @@ class userController{
         try {
             await user.save();
             req.session.successMessage = 'Đăng ký thành công! Hãy đăng nhập';
+            req.session.openLoginModal = true;
             res.redirect('/');
         } catch (err) {
-            next(err);
+            if (err.code === 11000) {
+                let field = Object.keys(err.keyPattern)[0];
+                let message = `Đã tồn tại email này`;
+                req.session.errorMessage = message;
+                req.session.openRegisterModal = true;
+                return res.redirect('/');
+        }
+
+        next(err);
         }
     }
 

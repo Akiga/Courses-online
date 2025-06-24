@@ -1,10 +1,6 @@
 // Lưu đăng nhập
 module.exports = function(req, res, next) {
   res.locals.account = req.session.account || null;
-  res.locals.successMessage = req.session.successMessage || null;
-
-    // Xóa sau khi hiển thị để tránh hiển thị lại
-    delete req.session.successMessage;
   next();
 };
 

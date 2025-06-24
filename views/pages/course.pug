@@ -38,10 +38,15 @@ block content
           //- h2.right-price= course.value === 0 ? 'MIỄN PHÍ' : course.value.toLocaleString('vi-VN') + ' VNĐ'
           a(href=`/home/${course.slug}/videos/0`)
             button.btn.btn-info.text-white.mb-3(type='button') VÀO HỌC NGAY
+        else if course.value === 0
+          h2.right-price MIỄN PHÍ
+          a(href=`/home/${course.slug}/videos/0`)
+              button.btn.btn-info.text-white.mb-3(type='button') ĐĂNG KÍ HỌC
         else
-          h2.right-price= course.value === 0 ? 'MIỄN PHÍ' : course.value.toLocaleString('vi-VN') + ' VNĐ'
-          form(action=`/home/buy/${course.slug}` method="post")
-            input(type="hidden" name="amount" value=course.value)
+          h2.right-price= course.value.toLocaleString('vi-VN') + ' VNĐ'
+          //- form(action=`/home/buy/${course.slug}` method="post")
+          form(action=`/payment/create_payment` method="get")
+            //- input(type="hidden" name="amount" value=course.value)
             button.btn.btn-info.text-white.mb-3(type='submit') MUA KHÓA HỌC
 
         ul.list-group.list-group-flush

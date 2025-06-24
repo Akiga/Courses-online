@@ -8,6 +8,9 @@ router.get('/', homeController.index);
 // Render trang thông tin cá nhân
 router.get('/home/information', homeController.infor)
 
+// Cập nhật User
+router.post('/home/update-user', homeController.updateUser);
+
 // Render trang chi tiết khóa học
 router.get('/home/:slug' , homeController.detail);
 
@@ -17,7 +20,6 @@ router.get('/home/:slug/videos/:index', homeController.courseVideo);
 // Chức năng mua khóa học
 router.post('/home/buy/:slug', homeController.buyCourse);
 
-// Cập nhật User
-router.post('/home/update-user', homeController.updateUser);
+
 
 module.exports = router;

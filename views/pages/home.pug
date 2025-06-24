@@ -2,9 +2,23 @@ extends ../layouts/main
 
 block content
   if successMessage
-    .alert.alert-success.alert-dismissible.fade.show(role="alert")
-      | #{successMessage}
-      button.btn-close(type="button", data-bs-dismiss="alert", aria-label="Close")
+    script.
+      alert("#{successMessage}");
+  else if errorMessage
+    script.
+      alert("#{errorMessage}");
+  if openLoginModal
+    script.
+      document.addEventListener('DOMContentLoaded', function () {
+        openModal();
+        switchTab('login');
+      });
+  if openRegisterModal
+    script.
+      document.addEventListener('DOMContentLoaded', function () {
+        openModal();
+        switchTab('register');
+      });
   // Slider
   .sliders
     #carouselExampleInterval.carousel.slide(data-bs-ride="carousel")
