@@ -1,0 +1,159 @@
+extends ../layouts/main
+
+block content
+  style.
+    .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+    }
+    .scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+    }
+    .scrollbar-custom::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+    }
+    .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+    }
+    .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    }
+    .new-message {
+    background-color: #fefcbf;
+    }
+    .unread {
+    font-weight: 700;
+    }
+    .chat-container {
+    height: calc(100vh - 100px);
+    }
+  .container-fluid.p-4.chat-container.mb-3
+    h2.mb-4.text-dark.fw-bold Admin Chat
+    .row.bg-white.rounded.shadow.h-100
+      // User List
+      .col-md-3.bg-light.border-end.p-3.overflow-y-auto.scrollbar-custom
+        h3.h5.fw-semibold.text-dark.mb-3 Users
+        ul#users.list-group.list-group-flush
+      // Chat Area
+      .col-md-9.d-flex.flex-column
+        .p-3.border-bottom
+          h3.h5.fw-semibold.text-dark
+            | Chat with 
+            span#selected-user.text-primary No user selected
+        ul#messages.flex-grow-1.p-3.overflow-y-auto.scrollbar-custom.list-unstyled.mb-0
+        form#form.p-3.bg-light.border-top.d-flex.gap-2
+          input#input.form-control(type='text' autocomplete='off' placeholder='Type a message...')
+          button.btn.btn-primary(type='submit') Send
+    #debug.alert.alert-danger.mt-4.p-3.d-none
+        
+  script(src='/socket.io/socket.io.js')
+  script.
+    const socket = io();
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const messages = document.getElementById('messages');
+    const usersList = document.getElementById('users');
+    const selectedUserSpan = document.getElementById('selected-user');
+    let selectedUserId = null;
+    const unreadMessages = new Map();
+    const userMessages = new Map();
+    socket.emit('register-admin');
+    console.log('[Client] Admin registered');
+    socket.on('user-list', (users) => {
+    console.log(`[Client] Received user list:`, users);
+    usersList.innerHTML = '';
+    users.forEach(([userId, username]) => {
+    const li = document.createElement('li');
+    li.textContent = `${username}`;
+    li.dataset.userId = userId;
+    li.className = 'list-group-item list-group-item-action rounded';
+    li.onclick = () => {
+    selectedUserId = userId;
+    selectedUserSpan.textContent = username;
+    li.classList.remove('new-message', 'unread');
+    displayMessages(userId);
+    if (unreadMessages.has(userId)) {
+    unreadMessages.delete(userId);
+    }
+    };
+    usersList.appendChild(li);
+    });
+    });
+    socket.on('user-message', ({ userId, username, message, timestamp }) => {
+    console.log(`[Client] Received message from ${username} (${userId}): ${message}`);
+    if (!userMessages.has(userId)) {
+    userMessages.set(userId, []);
+    }
+    const existed = userMessages.get(userId).some(msg => msg.timestamp === timestamp && msg.message === message);
+    if (!existed) {
+    userMessages.get(userId).push({ username, timestamp, message });
+    }
+    if (selectedUserId === userId) {
+    displayMessages(userId);
+    } else {
+    if (!unreadMessages.has(userId)) {
+    unreadMessages.set(userId, []);
+    }
+    unreadMessages.get(userId).push({ username, timestamp, message });
+    const userItem = usersList.querySelector(`li[data-user-id="${userId}"]`);
+    if (userItem) {
+    userItem.classList.add('new-message', 'unread');
+    }
+    }
+    });
+    socket.on('send-user-messages', ({ userId, messages }) => {
+    console.log(`[Client] Received old messages for user ${userId}:`, messages);
+    if (!userMessages.has(userId)) {
+    userMessages.set(userId, []);
+    }
+    const existing = userMessages.get(userId);
+    messages.forEach((msg) => {
+    const duplicate = existing.some(m => m.timestamp === msg.timestamp && m.message === msg.message);
+    if (!duplicate) {
+    existing.push(msg);
+    }
+    });
+    if (selectedUserId === userId) {
+    displayMessages(userId);
+    }
+    });
+    function displayMessages(userId) {
+    messages.innerHTML = '';
+    const messagesToDisplay = userMessages.get(userId) || [];
+    messagesToDisplay.forEach((msg) => {
+    const item = document.createElement('li');
+    item.textContent = `${msg.username} (${msg.timestamp}): ${msg.message}`;
+    item.className = 'p-2 mb-2 bg-light rounded';
+    messages.appendChild(item);
+    });
+    if (unreadMessages.has(userId)) {
+    unreadMessages.get(userId).forEach((msg) => {
+    const item = document.createElement('li');
+    item.textContent = `${msg.username} (${msg.timestamp}): ${msg.message}`;
+    item.className = 'p-2 mb-2 bg-light rounded';
+    messages.appendChild(item);
+    });
+    unreadMessages.delete(userId);
+    }
+    messages.scrollTop = messages.scrollHeight;
+    }
+    form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (input.value && selectedUserId) {
+    console.log(`[Client] Sending message to ${selectedUserId}: ${input.value}`);
+    socket.emit('admin-message', { userId: selectedUserId, message: input.value });
+    if (!userMessages.has(selectedUserId)) {
+    userMessages.set(selectedUserId, []);
+    }
+    userMessages.get(selectedUserId).push({ username: 'You', timestamp: new Date().toISOString(), message: input.value });
+    displayMessages(selectedUserId);
+    input.value = '';
+    } else {
+    alert('Please select a user first!');
+    }
+    });
+    socket.on('connect', () => {
+    console.log(`[Client] Admin connected to server with ID: ${socket.id}`);
+    });

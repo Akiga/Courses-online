@@ -1,0 +1,76 @@
+extends ../layouts/main
+
+block content
+  .container-fluid.p-4.chat-container
+    h2.mb-4.text-dark.fw-bold User Chat
+    #register.card.mb-4
+      .card-body
+        input#username.form-control.mb-3(type='text' placeholder='Enter your username' value=user.fullname)
+    .card.flex-grow-1.d-flex.flex-column
+      ul#messages.flex-grow-1.p-3.overflow-y-auto.scrollbar-custom.list-unstyled.mb-0
+      form#form.p-3.bg-light.border-top.d-flex.gap-2(style='display: none;')
+        input#input.form-control(type='text' autocomplete='off' placeholder='Type a message...')
+        button.btn.btn-primary(type='submit') Send
+    #debug.alert.alert-danger.mt-4.p-3.d-none
+  script(src='/socket.io/socket.io.js')
+  script.
+    const socket = io();
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const messages = document.getElementById('messages');
+    const usernameInput = document.getElementById('username');
+    const registerDiv = document.getElementById('register');
+    const debugDiv = document.getElementById('debug');
+    const username = usernameInput.value.trim();
+    if (username) {
+    console.log(`[Client] Registering user: ${username}`);
+    socket.emit('register-user', username);
+    registerDiv.style.display = 'none';
+    form.style.display = 'flex';
+    }
+    form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (input.value) {
+    const message = input.value.trim();
+    console.log(`[Client] Sending message: ${message} with socket ID: ${socket.id}`);
+    socket.emit('user-message', message);
+    input.value = '';
+    } else {
+    debugDiv.textContent = 'Error: Empty message!';
+    debugDiv.classList.remove('d-none');
+    }
+    });
+    socket.on('user-message-confirmation', (messageData) => {
+    console.log(`[Client] Confirmed message from server: ${messageData.message}, userId: ${messageData.userId}, socketId: ${socket.id}`);
+    if (messageData.userId === socket.id) {
+    const item = document.createElement('li');
+    item.textContent = `You: ${messageData.message}`;
+    item.className = 'p-2 mb-2 bg-primary-subtle rounded';
+    messages.appendChild(item);
+    messages.scrollTop = messages.scrollHeight;
+    } else {
+    debugDiv.textContent = `Error: Mismatch - userId: ${messageData.userId}, socketId: ${socket.id}`;
+    debugDiv.classList.remove('d-none');
+    }
+    });
+    socket.on('admin-message', (msg) => {
+    console.log(`[Client] Received admin message: ${msg}`);
+    const item = document.createElement('li');
+    item.textContent = `Admin: ${msg}`;
+    item.className = 'p-2 mb-2 bg-light rounded';
+    messages.appendChild(item);
+    messages.scrollTop = messages.scrollHeight;
+    });
+    socket.on('connect', () => {
+    console.log(`[Client] Connected to server with ID: ${socket.id}`);
+    });
+    socket.on('disconnect', () => {
+    console.log(`[Client] Disconnected from server`);
+    debugDiv.textContent = 'Disconnected from server!';
+    debugDiv.classList.remove('d-none');
+    });
+    socket.on('error', (error) => {
+    console.log(`[Client] Socket error: ${error.message}`);
+    debugDiv.textContent = `Socket error: ${error.message}`;
+    debugDiv.classList.remove('d-none');
+    });

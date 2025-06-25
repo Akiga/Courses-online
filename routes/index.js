@@ -3,6 +3,7 @@ const home = require('./home');
 const course = require('./course');
 const user = require('./user')
 const comment = require('./comment')
+const chat = require('./chat')
 
 
 
@@ -12,6 +13,7 @@ function router(app) {
     app.use('/course' , course);
     app.use('/user', user);
     app.use('/comment', comment);
+    app.use('/chat', chat)
 }
 
 
