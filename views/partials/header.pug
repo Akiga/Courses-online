@@ -14,14 +14,14 @@ nav.navbar.navbar-expand-lg.nav-stick(data-bs-theme="light")
             img(src=account.avt, alt="Avatar")
             span=account.fullname
           .dropdown-content#dropdownMenu
-            a(href="/home/information") Thông tin cá nhân
+            a(href="/home/information") <i class="fa-solid fa-person"></i> Thông tin cá nhân
             if account.role == 'admin'
               a(href="/course/me") Quản lý khóa học
               a(href="/chat") Chat
-            else 
-              a(href="/chat/user") Chat với admin
+            else
+              a(href="/chat/user") <i class="fa-solid fa-message"></i> Chat với admin
             form(action='/user/logout' method='post')
-              button(type="submit", style='width:100%; padding: 12px 16px; border: none; background-color:#fff; display:block; color: red') Đăng xuất
+              button(type="submit", style='width:100%; padding: 12px 16px; border: none; background-color:#fff; display:block; color: red') <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
     else
       ul.navbar-nav.me-auto.mb-2.mb-lg-0
           li.nav-item

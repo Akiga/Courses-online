@@ -3,10 +3,20 @@ extends ../layouts/main
 block content
   if successMessage
     script.
-      alert("#{successMessage}");
+      document.addEventListener('DOMContentLoaded', function() {
+          showToast('Đăng kí tài khoản thành công!');
+      });
   else if errorMessage
     script.
-      alert("#{errorMessage}");
+      document.addEventListener('DOMContentLoaded', function() {
+          showToastErr('Email này đã tồn tại!');
+      });
+  if loginError
+    script.
+      document.addEventListener('DOMContentLoaded', function() {
+        const message = !{JSON.stringify(loginError)};
+        showToastErr(message, true);
+      });
   if openLoginModal
     script.
       document.addEventListener('DOMContentLoaded', function () {

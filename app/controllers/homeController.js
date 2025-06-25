@@ -21,10 +21,28 @@ class HomeController {
         const searchCondition = query
             ? { name: { $regex: query, $options: 'i' } } // tìm không phân biệt hoa thường
             : {};
+
+        // Lấy thông báo từ session
+        const successMessage = req.session.successMessage || null;
+        const errorMessage = req.session.errorMessage || null;
+        const openLoginModal = req.session.openLoginModal || false;
+        const openRegisterModal = req.session.openRegisterModal || false;
+        const loginError = req.query.error === 'loginFailed' ? (req.query.message || 'Đăng nhập thất bại!') : null;
+
+        // Xóa các giá trị session để không hiển thị lại
+        delete req.session.successMessage;
+        delete req.session.errorMessage;
+        delete req.session.openLoginModal;
+        delete req.session.openRegisterModal;
         Course.find({status: 'open', ...searchCondition})
         .then(courses => {
             res.render('pages/home', {
-                courses: multipleMongooseToObject(courses)
+                courses: multipleMongooseToObject(courses),
+                successMessage,
+                errorMessage,
+                openLoginModal,
+                openRegisterModal,
+                loginError
             });
         })
         .catch(err => {

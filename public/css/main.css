@@ -69,6 +69,7 @@ font-size: 14px;
   border-radius: 8px;
   z-index: 1000;
   overflow: hidden;
+  width: 200px;
 }
 
 .dropdown-content.show {
@@ -251,4 +252,37 @@ font-weight: 600;
     }
     .chat-container {
     height: calc(100vh - 100px);
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #4CAF50;
+      color: white;
+      padding: 16px;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .toastErr {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #e74c3c;
+      color: white;
+      padding: 16px;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .toast.show {
+    opacity: 1;
+    }
+    .toastErr.show {
+    opacity: 1;
     }

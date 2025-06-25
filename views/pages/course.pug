@@ -46,15 +46,15 @@ block content
           h2.right-price= course.value.toLocaleString('vi-VN') + ' VNĐ'
           form(action=`/home/buy/${course.slug}` method="post")
             input(type="hidden" name="amount" value=course.value)
-            button.btn.btn-info.text-white.mb-3(type='submit') MUA KHÓA HỌC
+            button.btn.btn-info.text-white.mb-3(type='submit') <i class="fa-solid fa-cart-shopping"></i> MUA KHÓA HỌC
 
         ul.list-group.list-group-flush
           li.list-group-item
             i.fa-solid.fa-star
-            span= ' Trình độ ' + course.level 
-          li.list-group-item
-            i.fa-solid.fa-timeline
-            |  Thời gian học: 2 giờ
+            if course.level = 'basic'
+              span Trình độ cơ bản
+            else
+              span Trình độ nâng cao
           li.list-group-item
             span= 'GV: ' + course.teacher
           li.list-group-item

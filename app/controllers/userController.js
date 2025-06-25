@@ -2,7 +2,7 @@ const User = require('../models/users')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client('264589417572-tq2bbpbpa8u17ird19imaa5claui2djp.apps.googleusercontent.com');
 class userController{
-    // Chức năng đăng nhập
+    // Chức năng đăng kí
     async store(req, res, next) {
         const userData = req.body;
         const user = new User(userData);
@@ -32,10 +32,10 @@ class userController{
             const account = await User.findOne({email: format.email, password: format.password})
             if(!account)
             {
-                return res.json('Lỗi đăng nhập')
+                req.session.openLoginModal = true;
+                return res.redirect('/?error=loginFailed&message=Đăng nhập thất bại! Vui lòng kiểm tra email hoặc mật khẩu.');
             }
             req.session.account = account
-            // res.json('Đăng nhập thành công')
             res.redirect('/');
         }catch(err){
             console.log('Có lỗi:' + err)

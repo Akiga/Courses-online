@@ -161,3 +161,38 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+  function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+          toast.classList.add('show');
+      }, 100);
+      
+      setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => {
+              toast.remove();
+          }, 500);
+      }, 5000);
+  }
+
+  function showToastErr(message) {
+      const toast = document.createElement('div');
+      toast.className = 'toastErr';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+          toast.classList.add('show');
+      }, 100);
+      
+      setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => {
+              toast.remove();
+          }, 500);
+      }, 5000);
+  }
