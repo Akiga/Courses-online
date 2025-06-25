@@ -230,8 +230,6 @@ color: #fff;
 font-weight: 600;
 }
 
-
-
 .scrollbar-custom {
     scrollbar-width: thin;
     scrollbar-color: #888 #f1f1f1;
@@ -285,4 +283,23 @@ font-weight: 600;
     }
     .toastErr.show {
     opacity: 1;
-    }
+    } 
+
+@media (max-width: 768px){
+  .note-brand{
+    display: none;
+  }
+  .me-auto{
+    margin-right: 0 !important;
+  }
+  .carousel.pointer-event{
+    height: 250px;
+  }
+  .container-header{
+    text-align: center;
+  }
+  .card-br{
+    width: 10rem !important;
+    height: 15rem !important;
+  }
+}

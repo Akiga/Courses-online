@@ -50,6 +50,19 @@ block content
         
   script(src='/socket.io/socket.io.js')
   script.
+    function formatTimestamp(timestamp) {
+      const date = new Date(timestamp);
+      // Định dạng thời gian theo kiểu Việt Nam (VD: 25/06/2025 20:28)
+      return date.toLocaleString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false // Sử dụng định dạng 24 giờ
+      });
+    }
     const socket = io();
     const form = document.getElementById('form');
     const input = document.getElementById('input');
@@ -120,24 +133,24 @@ block content
     }
     });
     function displayMessages(userId) {
-    messages.innerHTML = '';
-    const messagesToDisplay = userMessages.get(userId) || [];
-    messagesToDisplay.forEach((msg) => {
-    const item = document.createElement('li');
-    item.textContent = `${msg.username} (${msg.timestamp}): ${msg.message}`;
-    item.className = 'p-2 mb-2 bg-light rounded';
-    messages.appendChild(item);
-    });
-    if (unreadMessages.has(userId)) {
-    unreadMessages.get(userId).forEach((msg) => {
-    const item = document.createElement('li');
-    item.textContent = `${msg.username} (${msg.timestamp}): ${msg.message}`;
-    item.className = 'p-2 mb-2 bg-light rounded';
-    messages.appendChild(item);
-    });
-    unreadMessages.delete(userId);
-    }
-    messages.scrollTop = messages.scrollHeight;
+      messages.innerHTML = '';
+      const messagesToDisplay = userMessages.get(userId) || [];
+      messagesToDisplay.forEach((msg) => {
+        const item = document.createElement('li');
+        item.textContent = `${msg.username} (${formatTimestamp(msg.timestamp)}): ${msg.message}`;
+        item.className = 'p-2 mb-2 bg-light rounded';
+        messages.appendChild(item);
+      });
+      if (unreadMessages.has(userId)) {
+        unreadMessages.get(userId).forEach((msg) => {
+          const item = document.createElement('li');
+          item.textContent = `${msg.username} (${formatTimestamp(msg.timestamp)}): ${msg.message}`;
+          item.className = 'p-2 mb-2 bg-light rounded';
+          messages.appendChild(item);
+        });
+        unreadMessages.delete(userId);
+      }
+      messages.scrollTop = messages.scrollHeight;
     }
     form.addEventListener('submit', (e) => {
     e.preventDefault();
