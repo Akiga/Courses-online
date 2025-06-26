@@ -16,19 +16,52 @@ html
     style.
       #page-loading {
         position: fixed;
-        z-index: 9999;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        background: rgba(255,255,255,0.85);
+        z-index: 10000;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(248, 249, 250, 0.92); /* Light gray, Bootstrap-inspired */
         display: none;
         justify-content: center;
         align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+      #page-loading.active {
+        display: flex;
+        opacity: 1;
+      }
+      #page-loading .loader {
+        text-align: center;
+      }
+      #page-loading .spinner {
+        width: 48px;
+        height: 48px;
+        border: 4px solid #0d6efd; /* Bootstrap primary color */
+        border-top: 4px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: auto;
+        margin-bottom: 1rem;
+      }
+      #page-loading p {
+        font-size: 1.1rem;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: #212529; /* Bootstrap dark text */
+        margin: 0;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
       }
 
   body
     // 🌟 Loading Overlay
     #page-loading
-      p(style='font-size: 1.2rem;') ⏳ Đang chuyển trang...
+      .loader
+        .spinner
+        p(aria-live="polite") SSM - Ae mình cứ thế thôi hẹ hẹ hẹ
 
     main
       include ../partials/header
@@ -44,13 +77,41 @@ html
     // 🌟 Chuyển trang loading
     script.
       document.addEventListener('DOMContentLoaded', () => {
+        const loader = document.getElementById('page-loading');
+
+        // Ẩn loader khi trang tải xong
+        window.addEventListener('load', () => {
+          loader.classList.remove('active');
+        });
+
+        // Xử lý click vào link
         const links = document.querySelectorAll('a');
         links.forEach(link => {
           link.addEventListener('click', e => {
             const href = link.getAttribute('href');
             if (href && !href.startsWith('#') && !href.startsWith('javascript') && !link.hasAttribute('target')) {
-              document.getElementById('page-loading').style.display = 'flex';
+              loader.classList.add('active');
             }
           });
+        });
+
+        // Xử lý sự kiện submit cho các form
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+          form.addEventListener('submit', () => {
+            loader.classList.add('active');
+          });
+        });
+
+        // Ngăn loader hiển thị khi nhấn back/forward
+        window.addEventListener('popstate', () => {
+          loader.classList.remove('active');
+        });
+
+        // Ẩn loader khi trang được tải lại từ bộ nhớ đệm
+        window.addEventListener('pageshow', (event) => {
+          if (event.persisted) {
+            loader.classList.remove('active');
+          }
         });
       });
