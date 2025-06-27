@@ -22,15 +22,25 @@ block content
               strong #{videoCount}
               |  bài học
 
-          if videos && videos.length
-            ul.list-group
-              each video, i in videos
-                li.list-group-item.d-flex.justify-content-between.align-items-center
-                  | #{i + 1}. #{video.title}
-                  span.badge.text-bg-primary.rounded-pill= video.durationFormatted || '---'
-          else
-            p.text-muted Chưa có video nào trong khóa học.
-
+            #accordionFlushExample.accordion.accordion-flush
+              .accordion-item
+                h2.accordion-header
+                  button.accordion-button.collapsed(
+                    type='button',
+                    data-bs-toggle='collapse',
+                    data-bs-target='#flush-collapseOne',
+                    aria-expanded='false',
+                    aria-controls='flush-collapseOne'
+                  ) Danh sách khóa học
+                #flush-collapseOne.accordion-collapse.collapse
+                  if videos && videos.length
+                    ul.list-group
+                      each video, i in videos
+                        li.list-group-item.d-flex.justify-content-between.align-items-center
+                          | #{i + 1}. #{video.title}
+                          span.badge.text-bg-primary.rounded-pill= video.durationFormatted || '---'
+                  else
+                    p.text-muted Chưa có video nào trong khóa học.
       .container-right
         img.right-img.container-card-list.mb-3(src=course.img, alt='Ảnh khóa học' data-tilt)
         if course.purchased
