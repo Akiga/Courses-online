@@ -95,7 +95,14 @@ html
           });
         });
 
-        
+        // Xử lý sự kiện submit cho các form
+        const forms = document.querySelectorAll('form:not(.chat-form)');
+        forms.forEach(form => {
+          form.addEventListener('submit', () => {
+            loader.classList.add('active');
+          });
+        });
+
 
         // Ngăn loader hiển thị khi nhấn back/forward
         window.addEventListener('popstate', () => {
