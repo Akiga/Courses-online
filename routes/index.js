@@ -4,6 +4,7 @@ const course = require('./course');
 const user = require('./user')
 const comment = require('./comment')
 const chat = require('./chat')
+const payment = require('./payment')
 
 
 
@@ -14,6 +15,7 @@ function router(app) {
     app.use('/user', user);
     app.use('/comment', comment);
     app.use('/chat', chat)
+    app.use('/payment', payment)
 }
 
 

@@ -8,7 +8,6 @@ block content
           h1.course-title= course.name || 'Khóa học không có tiêu đề'
           span.course-note= course.des || 'Không có ghi chú'
         .container-knowledge
-          
           h4.knowledge-tile Bạn sẽ học được gì?
           .knowledge-list
             each item in course.learnd.split('\n')
@@ -35,23 +34,26 @@ block content
       .container-right
         img.right-img.container-card-list.mb-3(src=course.img, alt='Ảnh khóa học' data-tilt)
         if course.purchased
-          //- h2.right-price= course.value === 0 ? 'MIỄN PHÍ' : course.value.toLocaleString('vi-VN') + ' VNĐ'
           a(href=`/home/${course.slug}/videos/0`)
             button.btn.btn-info.text-white.mb-3(type='button') VÀO HỌC NGAY
         else if course.value === 0
           h2.right-price MIỄN PHÍ
           a(href=`/home/${course.slug}/videos/0`)
-              button.btn.btn-info.text-white.mb-3(type='button') ĐĂNG KÍ HỌC
+            button.btn.btn-info.text-white.mb-3(type='button') ĐĂNG KÍ HỌC
         else
           h2.right-price= course.value.toLocaleString('vi-VN') + ' VNĐ'
-          form(action=`/home/buy/${course.slug}` method="post")
+          form(id="paymentForm" action=`/payment/create/${course.slug}` method="post")
+            input(type="hidden" name="orderId" id="orderId" value=`ORDER_${Date.now()}`)
             input(type="hidden" name="amount" value=course.value)
-            button.btn.btn-info.text-white.mb-3(type='submit') <i class="fa-solid fa-cart-shopping"></i> MUA KHÓA HỌC
+            input(type="hidden" name="orderInfo" value='Thanh toan don hang')
+            button.btn.btn-info.text-white.mb-3(type='submit')
+              i.fa-solid.fa-cart-shopping
+              |  MUA KHÓA HỌC
 
         ul.list-group.list-group-flush
           li.list-group-item
             i.fa-solid.fa-star
-            if course.level = 'basic'
+            if course.level === 'basic'
               span Trình độ cơ bản
             else
               span Trình độ nâng cao
@@ -61,7 +63,7 @@ block content
             i.fa-solid.fa-school
             |  Học mọi lúc mọi nơi
 
-  // Thêm thư viện + JS tilt ở cuối trang
+  // Thêm thư viện + JS tilt
   script(src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js")
   script.
     VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
