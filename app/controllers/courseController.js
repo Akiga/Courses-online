@@ -122,7 +122,7 @@ class CourseController {
         });
         await video.save()
         .then(() => {
-            res.redirect('/course/me');
+            res.redirect(`/course/manage-videos?slug=${course.slug}`);
         })
         .catch(err => {
             console.error('Error saving video course:', err);
@@ -188,12 +188,17 @@ class CourseController {
 
     // Cập nhật video
     async updateVideo(req, res, next){
+        const videoData = req.body;
+        const course = await Course.findById(videoData.courseId);
+        if (!course) {
+            return res.status(404).send('Course not found');
+        }
         try {
             if (req.body.duration) {
             req.body.duration = parseDuration(req.body.duration);
         }
             await Video.updateOne({ _id: req.params.id}, req.body);
-            res.redirect('/course/me');
+            res.redirect(`/course/manage-videos?slug=${course.slug}`);
         }
         catch(error){
             next(error)
@@ -201,11 +206,26 @@ class CourseController {
     }
 
     // Xóa video
-    deleteVideo(req, res, next){
-        Video.deleteOne({_id: req.params.id})
-        .then(() => res.redirect('/course/me'))
-        .catch((error) => next(error))
+    async deleteVideo(req, res, next) {
+        try {
+            const videoData = req.body;
+
+            // Lấy thông tin khóa học
+            const course = await Course.findById(videoData.courseId);
+            if (!course) {
+                return res.status(404).send('Không tìm thấy khóa học.');
+            }
+
+            // Xóa video
+            await Video.deleteOne({ _id: req.params.id });
+
+            // Chuyển hướng sau khi xóa
+            res.redirect(`/course/manage-videos?slug=${course.slug}`);
+        } catch (error) {
+            next(error);
+        }
     }
+
 }
 
 module.exports = new CourseController();

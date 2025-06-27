@@ -175,6 +175,7 @@ block content
                         td
                             a.btn.me-btn-edit.me-btn-action.me-2(href=`/course/update-video/` + video._id) Sửa
                             form(method='POST', action=`/course/video/${video._id}?_method=DELETE`, style='display:inline')
+                              input(type="hidden", name="courseId", value=video.courseId)
                               button.btn.me-btn-delete.me-btn-action(type='submit' onclick='return confirm("Xóa video này?")') Xóa
               else
                 tr

@@ -285,7 +285,7 @@ font-weight: 600;
     opacity: 1;
     } 
 
-@media (max-width: 768px){
+@media (max-width: 768px) and (min-width: 425px){
   .note-brand{
     display: none;
   }
@@ -301,5 +301,31 @@ font-weight: 600;
   .card-br{
     width: 10rem !important;
     height: 15rem !important;
+  }
+  .row {
+    --bs-gutter-x: 3.2em;
+    margin: auto;
+  }
+}
+
+@media (max-width: 425px){
+  .note-brand{
+    display: none;
+  }
+  .me-auto{
+    margin-right: 0 !important;
+  }
+  .carousel.pointer-event{
+    height: 250px;
+  }
+  .container-header{
+    text-align: center;
+  }
+  /* .card-br{
+    width: 10rem !important;
+    height: 15rem !important;
+  } */
+  .row {
+    margin: auto !important;
   }
 }
