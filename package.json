@@ -26,6 +26,7 @@
     "mongoose": "^8.15.2",
     "mongoose-slug-updater": "^3.3.0",
     "multer": "^2.0.1",
+    "node-fetch": "^2.7.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "pug": "^3.0.3",

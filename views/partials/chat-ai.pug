@@ -1,0 +1,112 @@
+style.
+  #chat-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+  }
+  #chatbox {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+    flex-direction: column;
+    overflow: hidden;
+    display: flex;
+  }
+  #chat-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+  }
+  #chat-input {
+    display: flex;
+    border-top: 1px solid #ccc;
+  }
+  #chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    outline: none;
+  }
+  #chat-input button {
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  #chatbox h4 {
+    margin: 0;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    text-align: center;
+  }
+  .user-messageAI{
+    margin-left: 80%;
+    padding: 12px;
+    background-color: #e0f7fa;
+    border-radius: 50%;
+  }
+
+// Nút mở khung chat
+button#chat-button 💬
+
+// Hộp chat nổi
+#chatbox
+  h4 AI Học tập
+  #chat-messages
+  #chat-input
+    input#input(placeholder='Nhập câu hỏi...')
+    button(onclick='send()') Gửi
+
+script.
+  const chatButton = document.getElementById('chat-button');
+  const chatbox = document.getElementById('chatbox');
+  const input = document.getElementById("input");
+
+  chatButton.addEventListener('click', () => {
+    chatbox.style.display = (chatbox.style.display === 'none' || chatbox.style.display === '') ? 'flex' : 'none';
+  });
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      send();
+    }
+  });
+
+  async function send() {
+    const message = input.value.trim();
+    if (!message) return;
+
+    const chat = document.getElementById("chat-messages");
+    chat.innerHTML += `<p class="user-messageAI">${message}</p>`;
+    input.value = '';
+
+    const res = await fetch("/chat/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message }),
+    });
+
+    const data = await res.json();
+    chat.innerHTML += `<p><strong>AI:</strong> ${data.reply}</p>`;
+    chat.scrollTop = chat.scrollHeight;
+  }
