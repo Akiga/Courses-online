@@ -34,6 +34,28 @@ style.
     padding: 10px;
     overflow-y: auto;
   }
+  #chat-messages p {
+    margin: 5px 0;
+    padding: 8px 12px;
+    max-width: 70%;
+    border-radius: 10px;
+    word-wrap: break-word;
+    
+  }
+  /* User messages: align right, different background */
+  #chat-messages p:not(:has(strong)) {
+    background-color: #007bff;
+    color: white;
+    margin-left: auto;
+    text-align: right;
+  }
+  /* AI messages: align left, different background */
+  #chat-messages p:has(strong) {
+    background-color: #f1f1f1;
+    color: black;
+    margin-right: auto;
+    text-align: left;
+  }
   #chat-input {
     display: flex;
     border-top: 1px solid #ccc;
@@ -57,12 +79,6 @@ style.
     background: #007bff;
     color: white;
     text-align: center;
-  }
-  .user-messageAI{
-    margin-left: 80%;
-    padding: 12px;
-    background-color: #e0f7fa;
-    border-radius: 50%;
   }
 
 // Nút mở khung chat
@@ -96,7 +112,7 @@ script.
     if (!message) return;
 
     const chat = document.getElementById("chat-messages");
-    chat.innerHTML += `<p class="user-messageAI">${message}</p>`;
+    chat.innerHTML += `<p class="user-message">${message}</p>`;
     input.value = '';
 
     const res = await fetch("/chat/chat", {
@@ -106,6 +122,6 @@ script.
     });
 
     const data = await res.json();
-    chat.innerHTML += `<p><strong>AI:</strong> ${data.reply}</p>`;
+    chat.innerHTML += `<p class="ai-message"><strong>AI:</strong> ${data.reply}</p>`;
     chat.scrollTop = chat.scrollHeight;
   }
