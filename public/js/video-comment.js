@@ -3,12 +3,30 @@ function formatTimeAgo(dateString) {
   const created = new Date(dateString);
   const diffMs = now - created;
   const diffMins = Math.floor(diffMs / 60000);
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
+  // Kiểm tra nếu bình luận trong vòng 1 phút
   if (diffMins < 1) return 'Vừa xong';
+  // Kiểm tra nếu bình luận trong vòng 60 phút
   if (diffMins < 60) return `${diffMins} phút trước`;
+
   const hours = created.getHours().toString().padStart(2, '0');
   const mins = created.getMinutes().toString().padStart(2, '0');
-  return `Hôm nay lúc ${hours}:${mins}`;
+
+  // Kiểm tra nếu bình luận trong cùng ngày
+  const isSameDay = now.getDate() === created.getDate() &&
+                    now.getMonth() === created.getMonth() &&
+                    now.getFullYear() === created.getFullYear();
+
+  if (isSameDay) {
+    return `Hôm nay lúc ${hours}:${mins}`;
+  }
+
+  // Nếu không cùng ngày, hiển thị ngày tháng
+  const day = created.getDate().toString().padStart(2, '0');
+  const month = (created.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0
+  const year = created.getFullYear();
+  return `${day}/${month}/${year} lúc ${hours}:${mins}`;
 }
 
 
