@@ -87,7 +87,8 @@ class paymentController{
             res.send('Thanh toán thất bại: ' + message);
         }
     }
-
+    // Xử lý thông báo IPN từ MoMo
+    // Đây là endpoint mà MoMo sẽ gọi để thông báo kết quả thanh toán
     async notify(req, res){
         const { orderId, resultCode, message, extraData } = req.body;
 
