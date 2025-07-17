@@ -148,6 +148,13 @@ block content
       background: var(--background);
       border-radius: 12px;
     }
+    input.info-value:disabled {
+      background-color: #f8f9fa;  /* nền nhẹ */
+      color: #212529;             /* màu chữ */
+      border: 1px solid #dee2e6;  /* viền nhẹ */
+      cursor: not-allowed;        /* đổi con trỏ */
+      font-weight: 500;           /* chữ đậm vừa */
+    }
     @media (max-width: 768px) {
       .profile-container {
         margin: 20px;
@@ -182,10 +189,10 @@ block content
         input.info-value(type="text", name="fullname", value=user.fullname, placeholder="Nhập họ và tên")
       .info-item
         .info-label Email
-        .info-value= user.email
+        input.info-value(type="text", name="email", value=user.email, placeholder="Nhập email" disabled)
       .info-item
         .info-label Tham gia từ
-        .info-value= formattedDate
+        input.info-value(type="text", name="joinDate", value=formattedDate, placeholder="Nhập ngày tham gia" disabled)
       .info-item
         .info-label Ảnh cá nhân
         input.info-value(type="text", name="avt", value=user.avt, placeholder="Nhập URL ảnh")
