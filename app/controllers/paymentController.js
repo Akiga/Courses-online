@@ -91,6 +91,7 @@ class paymentController{
     // Đây là endpoint mà MoMo sẽ gọi để thông báo kết quả thanh toán
     async notify(req, res){
         const { orderId, resultCode, message, extraData } = req.body;
+        console.log('MoMo IPN received:', req.body);
 
         const rawSignature = `accessKey=${config.accessKey}&amount=${req.body.amount}&extraData=${req.body.extraData}&message=${message}&orderId=${orderId}&orderInfo=${req.body.orderInfo}&orderType=${req.body.orderType}&partnerCode=${req.body.partnerCode}&payType=${req.body.payType}&requestId=${req.body.requestId}&responseTime=${req.body.responseTime}&resultCode=${resultCode}&transId=${req.body.transId}`;
         const signature = createSignature(rawSignature, config.secretKey);
