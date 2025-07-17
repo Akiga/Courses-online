@@ -65,7 +65,7 @@ class paymentController{
                 res.status(500).send('Error connecting to MoMo');
             });
     }
-    
+
     return(req, res){
         const { resultCode, orderId, message, extraData } = req.query;
 
@@ -90,31 +90,31 @@ class paymentController{
 
     async notify(req, res){
         const { orderId, resultCode, message, extraData } = req.body;
-        
+
         const rawSignature = `accessKey=${config.accessKey}&amount=${req.body.amount}&extraData=${req.body.extraData}&message=${message}&orderId=${orderId}&orderInfo=${req.body.orderInfo}&orderType=${req.body.orderType}&partnerCode=${req.body.partnerCode}&payType=${req.body.payType}&requestId=${req.body.requestId}&responseTime=${req.body.responseTime}&resultCode=${resultCode}&transId=${req.body.transId}`;
         const signature = createSignature(rawSignature, config.secretKey);
-    
+
         if (signature !== req.body.signature) {
             return res.status(400).json({ message: 'Invalid signature' });
         }
-    
+
         if (parseInt(resultCode) === 0) {
             try {
                 const decodedData = Buffer.from(extraData, 'base64').toString('utf-8');
                 const { slug, userId } = JSON.parse(decodedData);   
                 const course = await Course.findOne({ slug });
-    
+
                 if (!course) {
                     console.error('Course not found for order:', orderId);
                     return res.status(404).json({ message: 'Course not found' });
                 }
-    
-                const enrolled = await Enrollment.findOne({ userId, courseId: course._id });
+
+                const enrolled = await Enrollment.findOne({ userId, courseSlug: course.slug });
                 if (enrolled) {
                     return res.json({ message: 'IPN received, already enrolled' });
                 }
-    
-                await Enrollment.create({ userId, courseId: course._id, courseSlug: course.slug });
+
+                await Enrollment.create({ userId, courseSlug: course.slug });
             } catch (err) {
                 console.error('Error processing payment notification:', err);
                 return res.status(500).json({ message: 'Error processing payment' });
@@ -122,7 +122,7 @@ class paymentController{
         } else {
             console.log(`Order ${orderId} payment failed: ${message}`);
         }
-    
+
         res.json({ message: 'IPN received' });
     }
 }
