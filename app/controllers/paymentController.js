@@ -19,6 +19,7 @@ require('dotenv').config();
             .update(rawSignature)
             .digest('hex');
     }
+
 class paymentController{
     create(req, res){
         const { slug } = req.params;
@@ -89,44 +90,56 @@ class paymentController{
     }
     // Xử lý thông báo IPN từ MoMo
     // Đây là endpoint mà MoMo sẽ gọi để thông báo kết quả thanh toán
-    async notify(req, res){
-        const { orderId, resultCode, message, extraData } = req.body;
-        console.log('MoMo IPN received:', req.body);
+    async notify(req, res) {
+    console.log('IPN Request Received:', req.body);
 
-        const rawSignature = `accessKey=${config.accessKey}&amount=${req.body.amount}&extraData=${req.body.extraData}&message=${message}&orderId=${orderId}&orderInfo=${req.body.orderInfo}&orderType=${req.body.orderType}&partnerCode=${req.body.partnerCode}&payType=${req.body.payType}&requestId=${req.body.requestId}&responseTime=${req.body.responseTime}&resultCode=${resultCode}&transId=${req.body.transId}`;
-        const signature = createSignature(rawSignature, config.secretKey);
+    const { orderId, resultCode, message, extraData, amount, orderInfo, orderType, partnerCode, payType, requestId, responseTime, transId, signature: receivedSignature } = req.body;
 
-        if (signature !== req.body.signature) {
-            return res.status(400).json({ message: 'Invalid signature' });
-        }
+    const rawSignature = `accessKey=${config.accessKey}&amount=${amount}&extraData=${extraData}&message=${message}&orderId=${orderId}&orderInfo=${orderInfo}&orderType=${orderType}&partnerCode=${partnerCode}&payType=${payType}&requestId=${requestId}&responseTime=${responseTime}&resultCode=${resultCode}&transId=${transId}`;
+    const signature = createSignature(rawSignature, config.secretKey);
+    console.log('Generated Signature:', signature);
+    console.log('Received Signature:', receivedSignature);
 
-        if (parseInt(resultCode) === 0) {
-            try {
-                const decodedData = Buffer.from(extraData, 'base64').toString('utf-8');
-                const { slug, userId } = JSON.parse(decodedData);   
-                const course = await Course.findOne({ slug });
-
-                if (!course) {
-                    console.error('Course not found for order:', orderId);
-                    return res.status(404).json({ message: 'Course not found' });
-                }
-
-                const enrolled = await Enrollment.findOne({ userId, courseSlug: course.slug });
-                if (enrolled) {
-                    return res.json({ message: 'IPN received, already enrolled' });
-                }
-
-                await Enrollment.create({ userId, courseSlug: course.slug });
-            } catch (err) {
-                console.error('Error processing payment notification:', err);
-                return res.status(500).json({ message: 'Error processing payment' });
-            }
-        } else {
-            console.log(`Order ${orderId} payment failed: ${message}`);
-        }
-
-        res.json({ message: 'IPN received' });
+    if (signature !== receivedSignature) {
+        console.error('Invalid signature. Raw Signature:', rawSignature);
+        return res.status(400).json({ message: 'Invalid signature' });
     }
+
+    if (parseInt(resultCode) === 0) {
+        try {
+            console.log('Decoding extraData:', extraData);
+            const decodedData = Buffer.from(extraData, 'base64').toString('utf-8');
+            const { slug, userId } = JSON.parse(decodedData);
+            console.log('Decoded Data:', { slug, userId });
+
+            const course = await Course.findOne({ slug });
+            console.log('Course Found:', course);
+
+            if (!course) {
+                console.error('Course not found for slug:', slug);
+                return res.status(404).json({ message: 'Course not found' });
+            }
+
+            const enrolled = await Enrollment.findOne({ userId, courseSlug: course.slug });
+            console.log('Enrollment Check:', enrolled);
+
+            if (enrolled) {
+                console.log('Already enrolled:', userId, course.slug);
+                return res.json({ message: 'IPN received, already enrolled' });
+            }
+
+            const enrollment = await Enrollment.create({ userId, courseSlug: course.slug });
+            console.log('Enrollment Created:', enrollment);
+        } catch (err) {
+            console.error('Error processing payment notification:', err);
+            return res.status(500).json({ message: 'Error processing payment' });
+        }
+    } else {
+        console.log(`Order ${orderId} payment failed: ${message}`);
+    }
+
+    res.json({ message: 'IPN received' });
+}
 }
 
 module.exports = new paymentController()
