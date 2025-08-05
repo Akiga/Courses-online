@@ -12,6 +12,10 @@ const LoginMiddlewares = require('./app/middlewares/auth');
 require('dotenv').config();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
+const cors = require('cors');
+
+// 1. CORS
+app.use(cors());
 
 
 // 4. Session

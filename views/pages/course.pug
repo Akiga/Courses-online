@@ -52,7 +52,7 @@ block content
             button.btn.btn-info.text-white.mb-3(type='button') ĐĂNG KÍ HỌC
         else
           h2.right-price= course.value.toLocaleString('vi-VN') + ' VNĐ'
-          form(id="paymentForm" action=`/home/buy/${course.slug}` method="post")
+          form(id="paymentForm" action=`/payment/create/${course.slug}` method="post")
             input(type="hidden" name="orderId" id="orderId" value=`ORDER_${Date.now()}`)
             input(type="hidden" name="amount" value=course.value)
             input(type="hidden" name="orderInfo" value='Thanh toan don hang')
